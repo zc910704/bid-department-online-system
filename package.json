@@ -9,8 +9,11 @@
   },
   "dependencies": {
     "echarts": "^4.2.0-rc.2",
+    "element-ui": "^2.4.9",
+    "nprogress": "^0.2.0",
     "v-charts": "^1.19.0",
-    "vue": "^2.5.17"
+    "vue": "^2.5.17",
+    "vue-router": "^3.0.1"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.1.1",
