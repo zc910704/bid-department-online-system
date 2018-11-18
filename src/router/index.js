@@ -36,6 +36,18 @@ export const constantRouterMap = [
       component: () => import('@/views/dashboard/index')
     }]
   },
+// enterance of the overview
+  {
+    path: '/overview',
+    component: Layout,
+    hidden: false,
+    children:[{
+      path: 'overview',
+      name: 'Overview',
+      component: () => import('@views/overview/index'),
+      meta: { title: '总览', icon: 'dashboard' }
+    }]
+  },
 
   {
     path: '/example',
