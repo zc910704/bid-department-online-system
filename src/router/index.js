@@ -42,7 +42,7 @@ export const constantRouterMap = [
     component: Layout,
     hidden: false,
     children: [{
-      path: 'overview',
+      path: 'index',
       name: 'Overview',
       component: () => import('../views/overview/index'),
       meta: { title: '投标总览', icon: 'eye' }
@@ -54,7 +54,7 @@ export const constantRouterMap = [
     component: Layout,
     hidden: false,
     children: [{
-      path: 'detail',
+      path: 'index',
       name: 'detail',
       component: () => import('../views/detail/index'),
       meta: { title: '投标详情', icon: 'example' }
@@ -66,7 +66,7 @@ export const constantRouterMap = [
     component: Layout,
     hidden: false,
     children: [{
-      path: 'add',
+      path: 'index',
       name: 'add',
       component: () => import('../views/add/index'),
       meta: { title: '录入信息', icon: 'form' }
