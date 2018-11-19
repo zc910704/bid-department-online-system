@@ -36,16 +36,40 @@ export const constantRouterMap = [
       component: () => import('@/views/dashboard/index')
     }]
   },
-// enterance of the overview
+  // enterance of the overview
   {
     path: '/overview',
     component: Layout,
     hidden: false,
-    children:[{
+    children: [{
       path: 'overview',
       name: 'Overview',
-      component: () => import('@views/overview/index'),
-      meta: { title: '总览', icon: 'dashboard' }
+      component: () => import('../views/overview/index'),
+      meta: { title: '投标总览', icon: 'eye' }
+    }]
+  },
+
+  {
+    path: '/detail',
+    component: Layout,
+    hidden: false,
+    children: [{
+      path: 'detail',
+      name: 'detail',
+      component: () => import('../views/detail/index'),
+      meta: { title: '投标详情', icon: 'example' }
+    }]
+  },
+
+  {
+    path: '/add',
+    component: Layout,
+    hidden: false,
+    children: [{
+      path: 'add',
+      name: 'add',
+      component: () => import('../views/add/index'),
+      meta: { title: '录入信息', icon: 'form' }
     }]
   },
 

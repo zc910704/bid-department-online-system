@@ -1,23 +1,32 @@
 <template>
-  <ve-pie :data="chartData"></ve-pie>
+  <div>
+    <el-row>
+      <el-col :span="12"><h3>当年中标情况</h3></el-col>
+      <el-col :span="12"><h3>分公司当年指标落实度情况</h3></el-col>
+    </el-row>
+    <el-row>
+      <el-col :span="12"><div class="grid-content bg-purple-light"><static-pie /></div></el-col>
+      <el-col :span="12"><div class="grid-content bg-purple-light"><fullfill /></div></el-col>
+    </el-row>
+    <el-row>
+      <h3>当年月度投标中标情况</h3>
+    </el-row>
+    <el-row>
+      <colstatus/>
+    </el-row>
+  </div>
 </template>
-
 <script>
-  export default {
-    data () {
-      return {
-        chartData: {
-          columns: ['日期', '访问用户'],
-          rows: [
-            { '日期': '1/1', '访问用户': 1393 },
-            { '日期': '1/2', '访问用户': 3530 },
-            { '日期': '1/3', '访问用户': 2923 },
-            { '日期': '1/4', '访问用户': 1723 },
-            { '日期': '1/5', '访问用户': 3792 },
-            { '日期': '1/6', '访问用户': 4593 }
-          ]
-        }
-      }
-    }
-  }
+import StaticPie from './components/static-pie'
+import Fullfill from './components/fullfill'
+import Colstatus from './components/colstatus'
+export default {
+  components: { StaticPie, Fullfill, Colstatus }
+}
 </script>
+<style lang="scss" >
+h3{
+  text-align: center;
+}
+</style>
+
