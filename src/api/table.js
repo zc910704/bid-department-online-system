@@ -1,9 +1,8 @@
 import request from '@/utils/request'
 
-export function getList(params) {
+export function getcallist() {
   return request({
-    url: '/table/list',
-    method: 'get',
-    params
+    url: '/data/calllistinfo',
+    method: 'get'
   })
 }

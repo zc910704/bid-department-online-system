@@ -13,49 +13,38 @@
       border
       style="width: 100%">
       <el-table-column
-        prop="date"
+        prop="calldate"
         label="日期"
         width="180"/>
       <el-table-column
-        prop="company"
-        label="公司"
+        prop="status"
+        label="状态"
         width="180"/>
       <el-table-column
-        prop="item"
+        prop="callname"
         label="投标项目"/>
       <el-table-column
-        prop="price"
-        label="报价"/>
+        prop="winner"
+        label="中标人"/>
       <el-table-column
-        prop="rate"
-        label="下浮率"/>
-      <el-table-column
-        prop="isGot"
-        label="是否中标"/>
+        prop="method"
+        label="评标方法"/>
     </el-table>
   </div>
 </template>
 
 <script>
+import { getcallist } from '@/api/table'
 export default {
   data() {
     return {
       tableData: [
         {
-          date: '2016-05-02',
-          company: '中建七局',
-          item: '秦潭湖综合治理',
-          price: 250000000,
-          rate: '50%',
-          isGot: this.isGottoString(true)
-        },
-        {
-          date: '2016-05-02',
-          company: '铁4局',
-          item: '秦潭湖综合治理',
-          price: 280000000,
-          rate: '56%',
-          isGot: this.isGottoString(false)
+          calldate: '',
+          status: '',
+          callname: '',
+          winner: '',
+          method: ''
         }
       ],
       formInline: {
@@ -68,6 +57,9 @@ export default {
       console.log(this.formInline.search)
     }
   },
+  created() {
+    this.fetchData()
+  },
   methods: {
     isGottoString: val => {
       if (val) {
@@ -75,6 +67,12 @@ export default {
       } else {
         return '否'
       }
+    },
+    fetchData() {
+      this.getcallist().then(response => {
+        console.log(response.data)
+        this.tableData = response.data
+      })
     }
   }
 }
