@@ -5,7 +5,7 @@
         <el-input v-model="formInline.search" placeholder="输入搜索内容"/>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="onSubmit">查询</el-button>
+        <el-button type="primary" @click="onSearch">查询</el-button>
       </el-form-item>
     </el-form>
     <el-table
@@ -34,7 +34,8 @@
 </template>
 
 <script>
-import { getcallist } from '@/api/table'
+import { getcallist, searchCallList } from '../../api/table'
+
 export default {
   data() {
     return {
@@ -61,6 +62,11 @@ export default {
     this.fetchData()
   },
   methods: {
+    onSearch: (formInline) => {
+      searchCallList(formInline.search).then(response => {
+        this.tableData = response.data
+      })
+    },
     isGottoString: val => {
       if (val) {
         return '是'
@@ -69,7 +75,7 @@ export default {
       }
     },
     fetchData() {
-      this.getcallist().then(response => {
+      getcallist().then(response => {
         console.log(response.data)
         this.tableData = response.data
       })

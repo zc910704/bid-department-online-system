@@ -6,3 +6,10 @@ export function getcallist() {
     method: 'get'
   })
 }
+export function searchCallList(val) {
+  return request({
+    url: '/data/search-call-list',
+    method: 'post',
+    data: val
+  })
+}
