@@ -13,29 +13,38 @@
       border
       style="width: 100%">
       <el-table-column
-        prop="calldate"
         label="日期"
-        width="180"/>
+        width="180"
+        align="center">
+        <template slot-scope="scope">
+          <i class="el-icon-time"/>
+          <span style="margin-left: 10px">{{ scope.row.calldate | DateFormat }}</span>
+        </template>
+      </el-table-column>
       <el-table-column
         prop="status"
         label="状态"
-        width="180"/>
+        width="180"
+        align="center"/>
       <el-table-column
         prop="callname"
-        label="投标项目"/>
+        label="投标项目"
+        align="center"/>
       <el-table-column
         prop="winner"
-        label="中标人"/>
+        label="中标人"
+        align="center"/>
       <el-table-column
         prop="method"
-        label="评标方法"/>
+        label="评标方法"
+        align="center"/>
       <el-table-column
         label="操作"
         align="center">
         <template slot-scope="scope">
           <el-button
-            size="default"
-            @click="handleEdit(scope.$index, scope.row)">查看</el-button>
+            size="primary"
+            @click="handleCheck(scope.$index, scope.row)">查看</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -44,8 +53,14 @@
 
 <script>
 import { getcallist, searchCallList } from '../../api/table'
+import Moment from 'moment'
 
 export default {
+  filters: {
+    DateFormat: val => {
+      return Moment(val).format('YYYY-MM-DD')
+    }
+  },
   data() {
     return {
       tableData: [
@@ -90,7 +105,7 @@ export default {
         this.tableData = response.data
       })
     },
-    handleEdit(index, row) {
+    handleCheck(index, row) {
       console.log(index, row)
     }
   }
