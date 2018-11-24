@@ -29,6 +29,15 @@
       <el-table-column
         prop="method"
         label="评标方法"/>
+      <el-table-column
+        label="操作"
+        align="center">
+        <template slot-scope="scope">
+          <el-button
+            size="default"
+            @click="handleEdit(scope.$index, scope.row)">查看</el-button>
+        </template>
+      </el-table-column>
     </el-table>
   </div>
 </template>
@@ -50,7 +59,8 @@ export default {
       ],
       formInline: {
         search: ''
-      }
+      },
+      search: ''
     }
   },
   watch: {
@@ -79,6 +89,9 @@ export default {
         console.log(response.data)
         this.tableData = response.data
       })
+    },
+    handleEdit(index, row) {
+      console.log(index, row)
     }
   }
 }
