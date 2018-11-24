@@ -13,3 +13,10 @@ export function searchCallList(val) {
     data: val
   })
 }
+export function callDetail(val) {
+  return request({
+    url: '/data/call-detail-list',
+    method: 'post',
+    data: val
+  })
+}

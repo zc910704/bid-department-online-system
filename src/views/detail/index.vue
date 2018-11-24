@@ -48,11 +48,18 @@
         </template>
       </el-table-column>
     </el-table>
+    <el-dialog :visible.sync="dialogTableVisible" title="招标详情" width="50%">
+      <el-table :data="gridData">
+        <el-table-column width="300" property="biddername" label="投标公司法人名称"/>
+        <el-table-column width="200" property="bidderprice" label="投标价格"/>
+        <el-table-column width="100" property="rate" label="下浮率"/>
+      </el-table>
+    </el-dialog>
   </div>
 </template>
 
 <script>
-import { getcallist, searchCallList } from '../../api/table'
+import { getcallist, searchCallList, callDetail } from '../../api/table'
 import Moment from 'moment'
 
 export default {
@@ -60,6 +67,9 @@ export default {
     DateFormat: val => {
       return Moment(val).format('YYYY-MM-DD')
     }
+  },
+  components:
+  {
   },
   data() {
     return {
@@ -75,7 +85,14 @@ export default {
       formInline: {
         search: ''
       },
-      search: ''
+      dialogTableVisible: false,
+      gridData: [
+        {
+          biddername: '',
+          bidderprice: '',
+          rate: ''
+        }
+      ]
     }
   },
   watch: {
@@ -101,12 +118,14 @@ export default {
     },
     fetchData() {
       getcallist().then(response => {
-        console.log(response.data)
         this.tableData = response.data
       })
     },
     handleCheck(index, row) {
-      console.log(index, row)
+      callDetail({ 'call': row.callname }).then(response => {
+        this.gridData = response.data
+      })
+      this.dialogTableVisible = true
     }
   }
 }
