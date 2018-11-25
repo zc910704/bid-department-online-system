@@ -22,17 +22,24 @@
         </template>
       </el-table-column>
       <el-table-column
-        prop="status"
         label="状态"
-        width="180"
-        align="center"/>
+        width="100"
+        align="center">
+        <template slot-scope="scope">
+          <span style="margin-left: 10px">{{ scope.row.status | Status }}</span>
+        </template>
+      </el-table-column>
       <el-table-column
         prop="callname"
         label="投标项目"
         align="center"/>
       <el-table-column
+        prop="calllimit"
+        label="控制价"
+        align="center"/>
+      <el-table-column
         prop="winner"
-        label="中标人"
+        label="中标法人"
         align="center"/>
       <el-table-column
         prop="method"
@@ -52,7 +59,11 @@
       <el-table :data="gridData">
         <el-table-column width="300" property="biddername" label="投标公司法人名称"/>
         <el-table-column width="200" property="bidderprice" label="投标价格"/>
-        <el-table-column width="100" property="rate" label="下浮率"/>
+        <el-table-column width="100" property="rate" label="下浮率">
+          <template slot-scope="scope">
+            {{ scope.row.rate | PercentageFormat }}
+          </template>
+        </el-table-column>
       </el-table>
     </el-dialog>
   </div>
@@ -66,6 +77,21 @@ export default {
   filters: {
     DateFormat: val => {
       return Moment(val).format('YYYY-MM-DD')
+    },
+    Status: val => {
+      switch (val) {
+        // 已经有了return 不需要break语句了
+        case 'f': return '已结束'
+        case 'u': return '拟投标'
+        case 'd': return '正在进行'
+      }
+    },
+    PercentageFormat: val => {
+      if (val === 0) {
+        return 0
+      } else {
+        return Number(val * 100).toFixed(2) + '%'
+      }
     }
   },
   components:
@@ -79,7 +105,8 @@ export default {
           status: '',
           callname: '',
           winner: '',
-          method: ''
+          method: '',
+          calllimit: ''
         }
       ],
       formInline: {
@@ -124,6 +151,9 @@ export default {
     handleCheck(index, row) {
       callDetail({ 'call': row.callname }).then(response => {
         this.gridData = response.data
+        this.gridData.forEach(element => {
+          element.rate = element.bidderprice / row.calllimit
+        })
       })
       this.dialogTableVisible = true
     }
