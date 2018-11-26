@@ -62,6 +62,17 @@ export const constantRouterMap = [
   },
 
   {
+    path: '/contract',
+    component: Layout,
+    hidden: false,
+    children: [{
+      path: 'index',
+      component: () => import('../views/contractData/index'),
+      meta: { title: '成本查询', icon: 'nested' }
+    }]
+  },
+
+  {
     path: '/add',
     component: Layout,
     hidden: false,
