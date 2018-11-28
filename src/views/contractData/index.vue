@@ -1,6 +1,7 @@
 <template>
   <div>
-    <el-form :inline="true" v-model="search" style="margin-top: 20px;margin-left:10px">
+    <!-- 当一个 form 元素中只有一个输入框时，在该输入框中按下回车应提交该表单。如果希望阻止这一默认行为，可以在 标签上添加 @submit.native.prevent。 -->
+    <el-form :inline="true" v-model="search" style="margin-top: 20px;margin-left:10px" @submit.native.prevent>
       <el-form-item label="搜索">
         <el-input v-model="search.keyword" placeholder="输入搜索内容" @keyup.native.enter="onSearch"/>
       </el-form-item>
@@ -43,10 +44,13 @@
         width="50px"
         align="center"/>
       <el-table-column
-        prop="priceNet"
         label="不含税价"
         width="100px"
-        align="center"/>
+        align="center">
+        <template slot-scope="scope">
+          {{ scope.row.priceNet | DecimalFormat }}
+        </template>
+      </el-table-column>
       <el-table-column
         prop="priceTaxed"
         label="含税价"
@@ -67,6 +71,9 @@ export default {
   filters: {
     DateFormat: val => {
       if (val) return Moment(val).format('YYYY-MM-DD')
+    },
+    DecimalFormat: val => {
+      return Number(val).toFixed(2)
     }
   },
   components:
@@ -96,6 +103,13 @@ export default {
     onSearch: function() {
       searchContractPrice(this.search).then(response => {
         this.tableData = response.data
+        this.tableData.forEach(element => {
+          if (!element.priceNet) {
+            if (element.priceTaxed) {
+              element.priceNet = element.priceTaxed / 1.1
+            }
+          }
+        })
       })
     }
   }
