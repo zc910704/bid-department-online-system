@@ -38,7 +38,7 @@ export default {
   name: 'Login',
   data() {
     const validateUsername = (rule, value, callback) => {
-        callback()
+      callback()
     }
     const validatePass = (rule, value, callback) => {
       if (value.length < 5) {

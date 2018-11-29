@@ -7,6 +7,9 @@ export function login(username, password) {
     data: {
       username,
       password
+    },
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
     }
   })
 }
