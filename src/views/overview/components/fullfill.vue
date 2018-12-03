@@ -10,7 +10,7 @@ export default {
         rows: [
           {
             fullfill: '落实度',
-            percent: 0.6
+            percent: 0.3
           }
         ]
       }

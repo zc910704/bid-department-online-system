@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-form :inline="true" :model="formInline" class="demo-form-inline" style="margin-top: 20px;margin-left:10px">
+    <el-form :inline="true" :model="formInline" class="demo-form-inline" style="margin-top: 20px;margin-left:10px" @submit.native.prevent>
       <el-form-item label="搜索">
         <el-input v-model="formInline.search" placeholder="输入搜索内容"/>
       </el-form-item>
@@ -57,11 +57,16 @@
     </el-table>
     <el-dialog :visible.sync="dialogTableVisible" title="招标详情" width="50%">
       <el-table :data="gridData">
-        <el-table-column width="300" property="biddername" label="投标公司法人名称"/>
-        <el-table-column width="200" property="bidderprice" label="投标价格"/>
+        <el-table-column property="biddername" label="投标公司法人名称"/>
+        <el-table-column width="150" property="bidderprice" label="投标价格"/>
         <el-table-column width="100" property="rate" label="下浮率">
           <template slot-scope="scope">
             {{ scope.row.rate | PercentageFormat }}
+          </template>
+        </el-table-column>
+        <el-table-column width="170" property="rateDiff" label="与中标公司的偏差" align="center">
+          <template slot-scope="scope">
+            {{ scope.row.rateDiff | PercentageFormat }}
           </template>
         </el-table-column>
       </el-table>
@@ -117,7 +122,8 @@ export default {
         {
           biddername: '',
           bidderprice: '',
-          rate: ''
+          rate: '',
+          rateDiff: 0
         }
       ]
     }
@@ -151,8 +157,11 @@ export default {
     handleCheck(index, row) {
       callDetail({ 'call': row.callname }).then(response => {
         this.gridData = response.data
+        const winnerPrice = this.gridData.find((element) => (element.biddername = row.winner)).bidderprice//  ES6 find写法
+        console.log(winnerPrice)
         this.gridData.forEach(element => {
           element.rate = element.bidderprice / row.calllimit
+          element.rateDiff = (element.bidderprice - winnerPrice) / row.calllimit
         })
       })
       this.dialogTableVisible = true

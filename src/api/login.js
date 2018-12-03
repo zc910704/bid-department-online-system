@@ -10,7 +10,8 @@ export function login(username, password) {
     },
     headers: {
       'Content-Type': 'application/x-www-form-urlencoded'
-    }
+    },
+    withCredentials: true
   })
 }
 

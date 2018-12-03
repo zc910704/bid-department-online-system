@@ -47,7 +47,7 @@
         label="不含税价"
         width="100px"
         align="center">
-        <template slot-scope="scope">
+        <template v-if="scope.row.item" slot-scope="scope">
           {{ scope.row.priceNet | DecimalFormat }}
         </template>
       </el-table-column>

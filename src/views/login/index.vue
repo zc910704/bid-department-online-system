@@ -85,6 +85,8 @@ export default {
             this.loading = false
             console.log('finish dispatch')
             this.$router.push({ path: this.redirect || '/' })
+          }, () => {
+            this.loading = false
           }).catch(() => {
             this.loading = false
           })

@@ -67,6 +67,7 @@ export const constantRouterMap = [
     hidden: false,
     children: [{
       path: 'index',
+      name: 'contract',
       component: () => import('../views/contractData/index'),
       meta: { title: '成本查询', icon: 'nested' }
     }]
@@ -87,6 +88,7 @@ export const constantRouterMap = [
   {
     path: 'external-link',
     component: Layout,
+    hidden: true,
     children: [
       {
         path: 'https://www.github.com',
