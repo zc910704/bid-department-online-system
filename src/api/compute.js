@@ -1,8 +1,8 @@
 import request from '@/utils/request'
 
-export function searchContractPrice(val) {
+export function autoCompleteCompany(val) {
   return request({
-    url: 'contract/price/detail',
+    url: 'compute/company/name',
     method: 'post',
     data: val,
     params: {},

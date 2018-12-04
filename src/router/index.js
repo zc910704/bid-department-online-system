@@ -72,11 +72,21 @@ export const constantRouterMap = [
       meta: { title: '成本查询', icon: 'nested' }
     }]
   },
-
+  {
+    path: '/compute',
+    component: Layout,
+    hidden: false,
+    children: [{
+      path: 'index',
+      name: 'compute',
+      component: () => import('../views/compute/index'),
+      meta: { title: '投标试算', icon: 'form' }
+    }]
+  },
   {
     path: '/add',
     component: Layout,
-    hidden: false,
+    hidden: true,
     children: [{
       path: 'index',
       name: 'add',
