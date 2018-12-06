@@ -48,7 +48,7 @@
         <template slot-scope="scope">
           <el-button
             size="medium"
-            @click="handleEdit(scope.$index, scope.row)">查看</el-button>
+            @click="handleCheck(scope.$index, scope.row)">查看</el-button>
         </template>
       </el-table-column>
       <el-table-column
@@ -88,7 +88,7 @@
         align="center"
         width="80">
         <template slot-scope="scope">
-          <span>{{ scope.row.score = Number(scope.row.tscore) + Number(scope.row.cscore) }}</span>
+          <span>{{ scope.row.score }}</span>  <!--= Number(scope.row.tscore) + Number(scope.row.cscore)-->
         </template>
       </el-table-column>
       <el-table-column
@@ -110,19 +110,50 @@
         </template>
       </el-table-column>
     </el-table>
+    <!-- 报价历史对话框 -->
+    <el-dialog :visible.sync="dialogTableVisible" title="报价历史" width="80%">
+      <el-table :data="dialogData">
+        <el-table-column property="callfor__callname" label="招标项目"/>
+        <el-table-column property="callfor__calldate" label="日期">
+          <template slot-scope="scope">
+            {{ scope.row.callfor__calldate | DateFormat }}
+          </template>
+        </el-table-column>
+        <el-table-column width="150" property="bidderprice" label="投标价格"/>
+        <el-table-column width="100" property="history_rate" label="下浮率">
+          <template slot-scope="scope">
+            {{ scope.row.history_rate | PercentageFormat }}
+          </template>
+        </el-table-column>
+        <el-table-column width="200" property="callfor__method" label="评标方法"/>
+        <el-table-column width="150" property="isWinner" label="是否中标"/>
+      </el-table>
+    </el-dialog>
   </div>
 </template>
 
 <script>
-import { autoCompleteCompany } from '../../api/compute'
+import { autoCompleteCompany, historyCheck } from '../../api/compute'
+import Moment from 'moment'
 
 export default {
-  filter: {
-    ScoreFilter: (val) => {
-      if (val) {
-        return val
-      } else {
+  filters: {
+    DateFormat: val => {
+      return Moment(val).format('YYYY-MM-DD')
+    },
+    Status: val => {
+      switch (val) {
+        // 已经有了return 不需要break语句了
+        case 'f': return '已结束'
+        case 'u': return '拟投标'
+        case 'd': return '正在进行'
+      }
+    },
+    PercentageFormat: val => {
+      if (val === 0) {
         return 0
+      } else {
+        return Number(val * 100).toFixed(2) + '%'
       }
     }
   },
@@ -132,41 +163,57 @@ export default {
       timeout: null,
       control: '',
       tableData: [{
-        company: '默认公司',
-        bid: 200000,
+        company: '中建七局有限公司',
+        bid: '',
         rate: '',
         cscore: '',
         tscore: '',
         score: '',
         order: ''
-      }]
+      }],
+      dialogTableVisible: false,
+      dialogData: [
+        {
+          callfor__callname: '',
+          callfor__calldate: '',
+          bidderprice: '',
+          callfor__calllimit: '',
+          callfor__method: '',
+          history_rate: 0,
+          callfor__winner: '',
+          isWinner: ''
+        }
+      ]
     }
   },
   computed: {
-    hash() { // notice: 这里不能使用箭头函数! can't use => here!
-      let i = ''
-      for (const element of this.tableData) {
-        i += String(element.score)
+    scoreHash() { // notice: 这里不能使用箭头函数! can't use => here!
+      let hash = 0
+      for (var element of this.tableData) {
+        element.score = Number(element.cscore) + Number(element.tscore)
+        hash += Number(element.score)
       }
-      return i
+      return hash
     }
   },
   watch: {
-    hash(newVal, oldVal) {
+    scoreHash(newVal, oldVal) {
       console.log(oldVal, newVal)
-      const ordered = this.tableData.sort(function() {
-        return (a, b) => {
-          return a.score - b.score
-        }
-      })
+      const order = []
       for (const element of this.tableData) {
-        var i = ordered.find((value, index, arr) => {
-          if (value.company === element.company) {
-            return index
-          }
-        })
-        element.order = i
+        order.push(Number(element.score))
       }
+      order.sort(function(m, n) {
+        if (m < n) return 1
+        else if (m > n) return -1
+        else return 0
+      })
+      this.tableData.forEach((item, index, array) => {
+        var i = order.findIndex((val, i, arr) => { // notice： ES6中findIndex与find的用法：回调内直接return符合要求的对象即可
+          return val === item.score
+        })
+        array[index].order = i + 1
+      })
     }
   },
   methods: {
@@ -186,16 +233,31 @@ export default {
     handleSelect(item) {
       console.log(item)
     },
-    handleEdit(index, row) {
-      console.log(index, row)
+    handleCheck(index, row) {
+      historyCheck({ 'company': row.company }).then(response => {
+        this.dialogData = response.data
+        this.dialogData.forEach(element => {
+          element.history_rate = 1 - element.bidderprice / element.callfor__calllimit
+          if (row.company === element.callfor__winner) {
+            element.isWinner = '是'
+          } else {
+            element.isWinner = '否'
+          }
+        })
+        this.dialogTableVisible = true
+      })
     },
     handleDelete(index, row) {
       this.tableData.splice(row, 1)
     },
     onSubmit() {
       this.tableData.push({
-        company: this.company
+        company: this.company,
+        cscore: '',
+        tscore: '',
+        score: ''
       })
+      this.company = ''
     },
     controlChangeHandle(index, row) {
       if (Number(this.control)) {

@@ -9,3 +9,13 @@ export function autoCompleteCompany(val) {
     withCredentials: true
   })
 }
+
+export function historyCheck(val) {
+  return request({
+    url: 'compute/company/price/history',
+    method: 'post',
+    data: val,
+    params: {},
+    withCredentials: true
+  })
+}
