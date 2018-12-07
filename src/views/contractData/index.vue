@@ -10,6 +10,7 @@
       </el-form-item>
     </el-form>
     <el-table
+      v-loading="loading"
       :data="tableData"
       border
       style="width: 100%">
@@ -84,6 +85,7 @@ export default {
       search: {
         keyword: ''
       },
+      loading: false,
       tableData: [
         {
           contract__contractName: '',
@@ -101,6 +103,7 @@ export default {
   },
   methods: {
     onSearch: function() {
+      this.loading = true
       searchContractPrice(this.search).then(response => {
         this.tableData = response.data
         this.tableData.forEach(element => {
@@ -110,9 +113,9 @@ export default {
             }
           }
         })
+        this.loading = false
       })
     }
   }
-
 }
 </script>

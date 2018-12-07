@@ -9,6 +9,7 @@
       </el-form-item>
     </el-form>
     <el-table
+      v-loading="loading"
       :data="tableData"
       border
       style="width: 100%">
@@ -104,6 +105,7 @@ export default {
   },
   data() {
     return {
+      loading: true,
       tableData: [
         {
           calldate: '',
@@ -135,6 +137,7 @@ export default {
   },
   created() {
     this.fetchData()
+    this.loading = false
   },
   methods: {
     onSearch: (formInline) => {
