@@ -112,7 +112,7 @@
     </el-table>
     <!-- 报价历史对话框 -->
     <el-dialog :visible.sync="dialogTableVisible" title="报价历史" width="80%">
-      <el-table :data="dialogData">
+      <el-table :data="dialogData" :summary-method="getSummaries" show-summary >
         <el-table-column property="callfor__callname" label="招标项目"/>
         <el-table-column property="callfor__calldate" label="日期">
           <template slot-scope="scope">
@@ -263,6 +263,32 @@ export default {
       if (Number(this.control)) {
         row.rate = Number(row.bid / this.control * 100).toFixed(2)
       }
+    },
+    getSummaries(param) {
+      const { columns, data } = param
+      const avg = []
+      columns.forEach((column, index) => {
+        if (index === 0) {
+          avg[index] = '平均值'
+          return
+        }
+        const values = data.map(item => Number(item[column.property]))
+        if (index === 3) {
+          if (!values.every(value => isNaN(value))) {
+            avg[index] = values.reduce((prev, curr) => {
+              const value = Number(curr)
+              if (!isNaN(value)) {
+                return prev + curr
+              } else {
+                return prev
+              }
+            }, 0)
+            avg[index] = Number(avg[index] * 100 / values.length).toFixed(2)
+            avg[index] += '%'
+          }
+        }
+      })
+      return avg
     }
   }
 }
