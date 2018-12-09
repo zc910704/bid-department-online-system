@@ -19,11 +19,23 @@
         <div class="dashboard-text">内存使用:{{ status.memo_load }}%</div>
       </div>
     </el-card>
+    <el-card class="box-card">
+      <div slot="header" class="clearfix">
+        <span>最近更新</span>
+      </div>
+      <div class="text item">
+        <el-collapse v-model="activeNames" @change="handleChange">
+          <el-collapse-item v-for="item in update" :key="item.id" :title="item.title" :name="item.id">
+            {{ item.content }}
+          </el-collapse-item>
+        </el-collapse>
+      </div>
+    </el-card>
   </div>
 </template>
 
 <script>
-import { getStatus } from '@/api/status'
+import { getStatus, getUpdate } from '@/api/status'
 import { mapGetters } from 'vuex'
 
 export default {
@@ -34,7 +46,14 @@ export default {
         cpu_load: 0,
         memo_load: 0,
         user: ''
-      }
+      },
+      update: [{
+        id: '',
+        title: '',
+        time: '',
+        content: ''
+      }],
+      activeNames: ['1']
     }
   },
   computed: {
@@ -45,12 +64,21 @@ export default {
   },
   created() {
     this.loadStatus()
+    this.loadUpdate()
   },
   methods: {
     loadStatus() {
       getStatus().then(response => {
         this.status = response.data
       })
+    },
+    loadUpdate() {
+      getUpdate().then(response => {
+        this.update = response.data
+      })
+    },
+    handleChange(val) {
+      console.log(val)
     }
   }
 }

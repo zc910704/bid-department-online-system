@@ -7,3 +7,11 @@ export function getStatus() {
     withCredentials: true
   })
 }
+
+export function getUpdate() {
+  return request({
+    url: '/server/update',
+    method: 'GET',
+    withCredentials: true
+  })
+}
