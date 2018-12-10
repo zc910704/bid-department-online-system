@@ -26,6 +26,7 @@
       <div class="text item">
         <el-collapse v-model="activeNames" @change="handleChange">
           <el-collapse-item v-for="item in update" :key="item.id" :title="item.title" :name="item.id">
+            <p>{{ item.time | DateFormat }} </p>
             {{ item.content }}
           </el-collapse-item>
         </el-collapse>
@@ -37,9 +38,13 @@
 <script>
 import { getStatus, getUpdate } from '@/api/status'
 import { mapGetters } from 'vuex'
+import Moment from 'moment'
 
 export default {
   name: 'Dashboard',
+  filters: {
+    DateFormat: val => Moment(val).format('YYYY-MM-DD HH:MM')
+  },
   data() {
     return {
       status: {
@@ -90,15 +95,15 @@ export default {
     margin: 30px;
   }
   &-text {
-    font-size: 30px;
-    line-height: 46px;
+    font-size: 18px;
+    line-height: 28px;
   }
 }
 .text {
-  font-size: 14px;
+  font-size: 10px;
 }
 .item {
-  margin-bottom: 18px;
+  margin-bottom: 15px;
 }
 .clearfix:before,
 .clearfix:after {
@@ -111,6 +116,6 @@ export default {
 .box-card {
   float: left;
   margin: 5px 5px 5px 5px;
-  width: 400px;
+  width: 300px;
 }
 </style>
