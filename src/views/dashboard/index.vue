@@ -25,7 +25,7 @@
       </div>
       <div class="text item">
         <el-collapse v-model="activeNames" @change="handleChange">
-          <el-collapse-item v-for="item in update" :key="item.id" :title="item.title" :name="item.id">
+          <el-collapse-item v-for="item in update" :key="item.id" :title="item.title" :name="item.id" align="left">
             <p>{{ item.time | DateFormat }} </p>
             {{ item.content }}
           </el-collapse-item>

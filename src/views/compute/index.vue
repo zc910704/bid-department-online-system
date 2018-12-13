@@ -60,7 +60,7 @@
         </template>
       </el-table-column>
       <el-table-column
-        label="下浮率"
+        label="下浮率（%）"
         align="center"
         fit="True">
         <template slot-scope="scope">
@@ -248,7 +248,7 @@ export default {
       })
     },
     handleDelete(index, row) {
-      this.tableData.splice(row, 1)
+      this.tableData.splice(index, 1)
     },
     onSubmit() {
       this.tableData.push({
@@ -261,7 +261,7 @@ export default {
     },
     controlChangeHandle(index, row) {
       if (Number(this.control)) {
-        row.rate = Number(row.bid / this.control * 100).toFixed(2)
+        row.rate = 100 - Number(row.bid / this.control * 100).toFixed(2)
       }
     },
     getSummaries(param) {
