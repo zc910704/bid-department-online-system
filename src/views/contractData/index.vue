@@ -53,9 +53,8 @@
         </template>
       </el-table-column>
       <el-table-column
-        prop="priceTaxed"
-        label="含税价"
-        width="100px"
+        prop="classify"
+        label="分类"
         align="center"/>
       <el-table-column
         prop="comment"
@@ -96,6 +95,7 @@ export default {
           unit: '',
           priceNet: '',
           priceTaxed: '',
+          classify: '',
           comment: ''
         }
       ]
