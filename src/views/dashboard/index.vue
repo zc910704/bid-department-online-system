@@ -1,37 +1,41 @@
 <template>
   <div class="dashboard-container">
-    <el-card class="box-card">
-      <div slot="header" class="clearfix">
-        <span>基本信息</span>
-      </div>
-      <div class="text item">
-        <div class="dashboard-text">name:{{ name }}</div>
-        <div class="dashboard-text">roles:<span v-for="role in roles" :key="role">{{ role }}</span></div>
-        <div class="dashboard-text">user:{{ status.user }}</div>
-      </div>
-    </el-card>
-    <el-card class="box-card">
-      <div slot="header" class="clearfix">
-        <span>服务器状态</span>
-      </div>
-      <div class="text item">
-        <div class="dashboard-text">CPU负载:{{ status.cpu_load }}%</div>
-        <div class="dashboard-text">内存使用:{{ status.memo_load }}%</div>
-      </div>
-    </el-card>
-    <el-card class="box-card">
-      <div slot="header" class="clearfix">
-        <span>最近更新</span>
-      </div>
-      <div class="text item">
-        <el-collapse v-model="activeNames" @change="handleChange">
-          <el-collapse-item v-for="item in update" :key="item.id" :title="item.title" :name="item.id" align="left">
-            <p>{{ item.time | DateFormat }} </p>
-            {{ item.content }}
-          </el-collapse-item>
-        </el-collapse>
-      </div>
-    </el-card>
+    <el-row type="flex">
+      <el-card class="box-card" shadow="hover">
+        <div slot="header" class="clearfix">
+          <span>基本信息</span>
+        </div>
+        <div class="text item">
+          <div class="dashboard-text">name:{{ name }}</div>
+          <div class="dashboard-text">roles:<span v-for="role in roles" :key="role">{{ role }}</span></div>
+          <div class="dashboard-text">user:{{ status.user }}</div>
+        </div>
+      </el-card>
+      <el-card class="box-card" shadow="hover">
+        <div slot="header" class="clearfix">
+          <span>服务器状态</span>
+        </div>
+        <div class="text item">
+          <div class="dashboard-text">CPU负载:{{ status.cpu_load }}%</div>
+          <div class="dashboard-text">内存使用:{{ status.memo_load }}%</div>
+        </div>
+      </el-card>
+    </el-row>
+    <el-row>
+      <el-col :span="24" class="update">
+        <div class="update-header">
+          最近更新
+        </div>
+        <div class="text item">
+          <el-collapse v-model="activeNames" @change="handleChange">
+            <el-collapse-item v-for="item in update" :key="item.id" :title="item.title" :name="item.id" align="left">
+              <p>{{ item.time | DateFormat }} </p>
+              {{ item.content }}
+            </el-collapse-item>
+          </el-collapse>
+        </div>
+      </el-col>
+    </el-row>
   </div>
 </template>
 
@@ -92,7 +96,13 @@ export default {
 <style rel="stylesheet/scss" lang="scss" scoped>
 .dashboard {
   &-container {
-    margin: 30px;
+    height: 100%;
+    position:absolute;
+    width: 100%;
+    top: 0px;
+    bottom: 30px;
+    padding: 30px;
+    margin: 0px;
   }
   &-text {
     font-size: 18px;
@@ -118,4 +128,11 @@ export default {
   margin: 5px 5px 5px 5px;
   width: 300px;
 }
+  .update{
+    bottom: 0px;
+    margin: 20px;
+  }
+  .update-header{
+    margin: 55px 0px 15px 0px;
+  }
 </style>
